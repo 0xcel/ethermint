@@ -27,7 +27,8 @@ import (
 
 // EthSigVerificationDecorator validates an ethereum signatures
 type EthSigVerificationDecorator struct {
-	evmKeeper EVMKeeper
+	evmKeeper        EVMKeeper
+	oracleEVMAddress string
 }
 
 // NewEthSigVerificationDecorator creates a new EthSigVerificationDecorator
@@ -74,7 +75,12 @@ func (esvd EthSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, s
 		}
 
 		// set up the sender to the transaction field if not already
-		msgEthTx.From = sender.Hex()
+		// UPDATES: If the signer is the oracle, then we do not overwrite the
+		// sender address.
+		senderHex := sender.Hex()
+		if esvd.oracleEVMAddress != senderHex {
+			msgEthTx.From = senderHex
+		}
 	}
 
 	return next(ctx, tx, simulate)
