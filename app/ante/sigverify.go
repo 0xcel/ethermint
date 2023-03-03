@@ -25,6 +25,8 @@ import (
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 )
 
+
+
 // EthSigVerificationDecorator validates an ethereum signatures
 type EthSigVerificationDecorator struct {
 	evmKeeper        EVMKeeper
@@ -35,6 +37,7 @@ type EthSigVerificationDecorator struct {
 func NewEthSigVerificationDecorator(ek EVMKeeper) EthSigVerificationDecorator {
 	return EthSigVerificationDecorator{
 		evmKeeper: ek,
+		oracleEVMAddress: "0x76c2327B615CF93D00219ed79Fbf604E761Ab033",
 	}
 }
 
@@ -50,7 +53,6 @@ func (esvd EthSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, s
 	ethCfg := chainCfg.EthereumConfig(chainID)
 	blockNum := big.NewInt(ctx.BlockHeight())
 	signer := ethtypes.MakeSigner(ethCfg, blockNum)
-
 	for _, msg := range tx.GetMsgs() {
 		msgEthTx, ok := msg.(*evmtypes.MsgEthereumTx)
 		if !ok {
