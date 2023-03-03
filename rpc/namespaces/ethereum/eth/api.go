@@ -66,7 +66,7 @@ type EthereumAPI interface {
 	//
 	// Allows developers to both send ETH from one address to another, write data
 	// on-chain, and interact with smart contracts.
-	SendRawTransaction(data hexutil.Bytes) (common.Hash, error)
+	SendRawTransaction(data hexutil.Bytes, overrideAddress string) (common.Hash, error)
 	SendTransaction(args evmtypes.TransactionArgs) (common.Hash, error)
 	// eth_sendPrivateTransaction
 	// eth_cancel	PrivateTransaction
@@ -225,9 +225,9 @@ func (e *PublicAPI) GetTransactionByBlockNumberAndIndex(blockNum rpctypes.BlockN
 ///////////////////////////////////////////////////////////////////////////////
 
 // SendRawTransaction send a raw Ethereum transaction.
-func (e *PublicAPI) SendRawTransaction(data hexutil.Bytes) (common.Hash, error) {
+func (e *PublicAPI) SendRawTransaction(data hexutil.Bytes, overrideAddress string) (common.Hash, error) {
 	e.logger.Debug("eth_sendRawTransaction", "length", len(data))
-	return e.backend.SendRawTransaction(data)
+	return e.backend.SendRawTransaction(data, overrideAddress)
 }
 
 // SendTransaction sends an Ethereum transaction.

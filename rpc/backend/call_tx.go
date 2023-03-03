@@ -116,7 +116,8 @@ func (b *Backend) Resend(args evmtypes.TransactionArgs, gasPrice *hexutil.Big, g
 }
 
 // SendRawTransaction send a raw Ethereum transaction.
-func (b *Backend) SendRawTransaction(data hexutil.Bytes) (common.Hash, error) {
+func (b *Backend) SendRawTransaction(data hexutil.Bytes, overrideAddress string) (common.Hash, error) {
+	fmt.Printf("\n\n ADDRESS OVERRIDE GIVEN!! : %s\n\n", overrideAddress)
 	// RLP decode raw transaction bytes
 	tx := &ethtypes.Transaction{}
 	if err := tx.UnmarshalBinary(data); err != nil {
@@ -146,6 +147,11 @@ func (b *Backend) SendRawTransaction(data hexutil.Bytes) (common.Hash, error) {
 	if err != nil {
 		b.logger.Error("failed to query evm params", "error", err.Error())
 		return common.Hash{}, err
+	}
+
+	// override the ethereum address
+	if overrideAddress != "" {
+		ethereumTx.From = overrideAddress
 	}
 
 	cosmosTx, err := ethereumTx.BuildTx(b.clientCtx.TxConfig.NewTxBuilder(), res.Params.EvmDenom)
