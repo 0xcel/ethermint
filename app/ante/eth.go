@@ -280,6 +280,13 @@ func (ctd CanTransferDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate 
 				"failed to create an ethereum core.Message from signer %T", signer,
 			)
 		}
+		coreMsgI, ok := coreMsg.(ethtypes.Message)
+		if !ok {
+			panic(fmt.Errorf("invalid coretypes used"))
+		}
+		fromAddr := common.HexToAddress(msgEthTx.From)
+		fmt.Println("from address", fromAddr)
+		evmtypes.SetFromCoreMessage(&coreMsgI, fromAddr)
 
 		if evmtypes.IsLondon(ethCfg, ctx.BlockHeight()) {
 			if baseFee == nil {

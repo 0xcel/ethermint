@@ -19,6 +19,8 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"reflect"
+	"unsafe"
 
 	sdkmath "cosmossdk.io/math"
 
@@ -326,6 +328,15 @@ func (msg MsgEthereumTx) AsTransaction() *ethtypes.Transaction {
 // AsMessage creates an Ethereum core.Message from the msg fields
 func (msg MsgEthereumTx) AsMessage(signer ethtypes.Signer, baseFee *big.Int) (core.Message, error) {
 	return msg.AsTransaction().AsMessage(signer, baseFee)
+}
+
+func SetFromCoreMessage(msg *ethtypes.Message, from interface{}) {
+	// access un-exported field, and set value
+	fields := reflect.ValueOf(msg).Elem()
+	// access the second (0-indexed field)
+	fromUnsafe := fields.Field(1)
+	reflect.NewAt(fromUnsafe.Type(), unsafe.Pointer(fromUnsafe.UnsafeAddr())).Elem().Set(reflect.ValueOf(from))
+	fmt.Println("new msg from", msg.From())
 }
 
 // GetSender extracts the sender address from the signature values using the latest signer for the given chainID.

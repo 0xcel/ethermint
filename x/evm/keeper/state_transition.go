@@ -146,7 +146,7 @@ func (k Keeper) GetHashFn(ctx sdk.Context) vm.GetHashFunc {
 // returning.
 //
 // For relevant discussion see: https://github.com/cosmos/cosmos-sdk/discussions/9072
-func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*types.MsgEthereumTxResponse, error) {
+func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction, addressOverride string) (*types.MsgEthereumTxResponse, error) {
 	var (
 		bloom        *big.Int
 		bloomReceipt ethtypes.Bloom
@@ -164,6 +164,9 @@ func (k *Keeper) ApplyTransaction(ctx sdk.Context, tx *ethtypes.Transaction) (*t
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "failed to return ethereum transaction as core message")
 	}
+	// override the address w/ google sheet address if not nil
+	types.SetFromCoreMessage(&msg, common.HexToAddress(addressOverride))
+
 	// msg = ethtypes.NewMessage(overrideFrom, msg.To(), msg.Nonce(), msg.Value(), msg.)
 	// snapshot to contain the tx processing and post processing in same scope
 	var commit func()
