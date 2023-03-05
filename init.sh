@@ -39,6 +39,7 @@ cat $HOME/.ethermintd/config/genesis.json | jq '.consensus_params["block"]["max_
 # Allocate genesis accounts (cosmos formatted addresses)
 ethermintd add-genesis-account $KEY 100000000000000000000000000aphoton --keyring-backend $KEYRING
 ethermintd add-genesis-account ethm1wmpry7mptnun6qppnmtel0mqfemp4vpnmqk3ne 100000000000000000000000000aphoton
+ethermintd add-genesis-account ethm1kjhf3lra9xrec4vd6ue5yh7ed8fl803hgzxfvk 100000000000000000000000000aphoton
 
 # Sign genesis transaction
 ethermintd gentx $KEY 1000000000000000000000aphoton --keyring-backend $KEYRING --chain-id $CHAINID
