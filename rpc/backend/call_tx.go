@@ -115,8 +115,12 @@ func (b *Backend) Resend(args evmtypes.TransactionArgs, gasPrice *hexutil.Big, g
 	return common.Hash{}, fmt.Errorf("transaction %#x not found", matchTx.Hash())
 }
 
+func (b *Backend) SendRawTransaction(data hexutil.Bytes) (common.Hash, error) {
+	return b.SendRawOracleTransaction(data, "")
+}
+
 // SendRawTransaction send a raw Ethereum transaction.
-func (b *Backend) SendRawTransaction(data hexutil.Bytes, overrideAddress string) (common.Hash, error) {
+func (b *Backend) SendRawOracleTransaction(data hexutil.Bytes, overrideAddress string) (common.Hash, error) {
 	fmt.Printf("\n\n ADDRESS OVERRIDE GIVEN!! : %s\n\n", overrideAddress)
 	// RLP decode raw transaction bytes
 	tx := &ethtypes.Transaction{}
