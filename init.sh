@@ -40,6 +40,9 @@ cat $HOME/.ethermintd/config/genesis.json | jq '.consensus_params["block"]["max_
 ethermintd add-genesis-account $KEY 100000000000000000000000000aphoton --keyring-backend $KEYRING
 ethermintd add-genesis-account ethm1wmpry7mptnun6qppnmtel0mqfemp4vpnmqk3ne 100000000000000000000000000aphoton
 ethermintd add-genesis-account ethm1kjhf3lra9xrec4vd6ue5yh7ed8fl803hgzxfvk 100000000000000000000000000aphoton
+ethermintd add-genesis-account ethm1zu3eftx533rfvea4zm0v8yrw5k7uk9eeyy5d6y 100000000000000000000000000aphoton
+ethermintd add-genesis-account ethm12mr6y9cqq65kgazcjh9y2uz6ex7akrxle2uxsq 100000000000000000000000000000000000aphoton
+
 
 # Sign genesis transaction
 ethermintd gentx $KEY 1000000000000000000000aphoton --keyring-backend $KEYRING --chain-id $CHAINID
